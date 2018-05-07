@@ -48,6 +48,231 @@
 
 	<script>
 
+	//reading data
+	d3.csv("data.csv", function(err, data){
+
+		var income = 3;
+		var parks = 2;
+		var noise = 2;
+		
+
+		console.log(data);
+
+		console.log(filter(income, parks, noise, data));
+		
+	});
+
+	function getNewIncome(data, num1, num2) {
+		// body...
+		var newdata = [];
+		for (var i = 0; i < data.length; i++) {
+			if (data[i].Income> num1 && data[i].Income<= num2) {
+				newdata.push(data[i]);
+			}
+		}
+
+		// if(newdata.length == 0){
+		// 	newdata = data;
+		// }
+
+		return newdata
+	}
+
+	function getNoiseParks(data, num1, num2){
+		var newdata = [];
+
+		for (var i = 0; i < data.length; i++) {
+			if (data[i].Park> num1 && data[i].Park <= num2) {
+				newdata.push(data[i]);
+			}
+			
+		}
+
+		// if(newdata.length == 0){
+		// 	newdata = data;
+		// }
+
+		return newdata;
+	}
+
+	function getNewNoise(data, num1, num2){
+		var newdata = [];
+
+		for (var i = 0; i < data.length; i++) {
+			console.log("a");
+			if (data[i].NoiseComplaints > num1 && data[i].NoiseComplaints <= num2) {
+				console.log("b")
+				newdata.push(data[i]);
+			} else {
+				console.log("no");
+			}
+			
+		}
+		
+		console.log(newdata.length);
+		// if(newdata.length == 0){
+		// 	newdata = data;
+		// }
+
+		return newdata;
+	}
+
+	function zipcodes(dataArr) {
+		// body...
+		zips = []
+		for (var i = 0; i < dataArr.length; i++) {
+			zips.push(dataArr[i].Zip);
+		}
+
+		return zips;
+	}
+
+	function noiseLevel(noise, parkArr){
+
+		if (noise == 1) {
+
+			var noiseArr = getNewNoise(parkArr, 0, 1400);
+			return zipcodes(noiseArr);
+
+		} else if (noise == 2) {
+			
+			console.log('in noise')
+			
+			var noiseArr = getNewNoise(parkArr, 14000, 2800);
+			
+			console.log(parkArr);
+			console.log(noiseArr);
+			
+			return zipcodes(noiseArr);
+		} else {
+
+			var noiseArr = getNewNoise(parkArr, 2800, 4500);
+			return zipcodes(noiseArr);
+			}
+	}
+
+
+	function parkLevel(parks, noise, incomeArr){
+
+		if (parks ==1) {
+
+			var parkArr = getNoiseParks(incomeArr, 0, 19);
+
+			if(parkArr.length> 3){
+
+				return noiseLevel(noise, parkArr);
+
+			} else {
+				return zipcodes(parkArr);
+			}
+
+		} else if (parks = 2) {
+			
+			console.log("in parks");
+			
+			var parkArr = getNoiseParks(incomeArr, 19, 38);
+
+			console.log(parkArr);
+			
+
+			if(parkArr.length> 3){
+
+				console.log(parkArr);
+
+				return noiseLevel(noise, parkArr);
+
+			} else {
+				return zipcodes(parkArr);
+			}
+
+		}else{
+
+			var parkArr = getNoiseParks(incomeArr, 38, 60)
+
+			if(parkArr.length> 3){
+
+				return noiseLevel(noise, parkArr);
+
+			} else {
+				return zipcodes(parkArr);
+			}
+
+		}
+
+	}
+
+
+	//filter input:data output: zipcode
+	function filter(income, parks, noise, data) {
+		// income: will be a number 1, 2, 3, 4, 5
+		//parks: 1, 2, 3
+		//noise: 1, 2, 3
+		zips = [];
+		if (income == 1) {
+
+			var  incomeArr = getNewIncome(data, 0, 78000);
+
+			if (incomeArr.length>3) {
+
+				return parkLevel(parks, noise, incomeArr);
+
+			} else{
+				return zipcodes(incomeArr);
+			}
+
+		} else if (income == 2){
+
+			var  incomeArr = getNewIncome(data, 78000, 168000);
+
+			if (incomeArr.length>3) {
+
+				return parkLevel(parks, noise, incomeArr);
+				
+			} else{
+				return zipcodes(incomeArr);
+			}
+
+		} else if (income == 3) {
+
+			console.log("here");
+
+			var  incomeArr = getNewIncome(data, 168000, 258000);
+
+			if (incomeArr.length>3) {
+
+				return parkLevel(parks, noise, incomeArr);
+				
+			} else{
+				return zipcodes(incomeArr);
+			}
+
+		} else if (income == 4){
+
+			var  incomeArr = getNewIncome(data, 258000, 348000);
+
+			if (incomeArr.length>3) {
+
+				return parkLevel(parks, noise, incomeArr);
+				
+			} else{
+				return zipcodes(incomeArr);
+			}
+
+		}else{
+
+			var  incomeArr = getNewIncome(data, 348000, 400000);
+
+			if (incomeArr.length>3) {
+
+				return parkLevel(parks, noise, incomeArr);
+				
+			} else{
+				return zipcodes(incomeArr);
+			}
+
+		}
+	}
+
 
 	// When the user scrolls the page, execute myFunction
 	window.onscroll = function() {myFunction()};
