@@ -31,10 +31,33 @@
 <body>
 
 	<div id="navbar">
-		<a href>Noise</a>
-		<a href>Parks</a>
-		<a href>Public Transportation</a>
-		<a href>Income</a>
+		<a href="#">Noise</a>
+			<form class="noisebuttons">
+				<input type="radio" name="noise" value="low"> Low
+				<input type="radio" name="noise" value="medium">Medium
+				<input type="radio" name="noise" value="high">High
+			</form>
+		<a href="#">Parks</a>
+			<form class="parksbuttons">
+				<input type="radio" name="noise" value="low"> Low
+				<input type="radio" name="noise" value="medium">Medium
+				<input type="radio" name="noise" value="high">High
+			</form>
+		<a href="#">Transportation</a>
+			<form class="transportbuttons">
+				<input type="radio" name="noise" value="low"> Low
+				<input type="radio" name="noise" value="medium">Medium
+				<input type="radio" name="noise" value="high">High
+			</form>
+		<a href="#">Income</a>
+			<form class="incomebuttons">
+				<input type="radio" name="noise" value="low"> Low
+				<input type="radio" name="noise" value="medium">Medium
+				<input type="radio" name="noise" value="high">High
+			</form>
+		<form class="submitbutton">
+			<input type="submit" value="Update Filter">
+		</form>
 	</div>
 
 
@@ -102,7 +125,6 @@
 		var newdata = [];
 
 		for (var i = 0; i < data.length; i++) {
-			console.log("a");
 			if (data[i].NoiseComplaints > num1 && data[i].NoiseComplaints <= num2) {
 				console.log("b")
 				newdata.push(data[i]);
@@ -139,7 +161,6 @@
 
 		} else if (noise == 2) {
 			
-			console.log('in noise')
 			
 			var noiseArr = getNewNoise(parkArr, 14000, 2800);
 			
@@ -170,9 +191,7 @@
 			}
 
 		} else if (parks = 2) {
-			
-			console.log("in parks");
-			
+
 			var parkArr = getNoiseParks(incomeArr, 19, 38);
 
 			console.log(parkArr);
@@ -236,8 +255,6 @@
 			}
 
 		} else if (income == 3) {
-
-			console.log("here");
 
 			var  incomeArr = getNewIncome(data, 168000, 258000);
 
@@ -360,7 +377,6 @@
 
 // Set base style of vector data
  function style(feature) {
-     console.log("into the new world");
      return {
      weight: 0,
      fillOpacity: 0.5,
