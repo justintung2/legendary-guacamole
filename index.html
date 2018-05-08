@@ -14,6 +14,7 @@
 <script src='https://api.tiles.mapbox.com/mapbox.js/v1.0.0/mapbox.js'></script>
 <!-- <script src='zip_code_040114.json'></script> -->
 <script src='cheerup.json'></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
 <style>
  html,
@@ -50,19 +51,25 @@
 	</div>
 
 	<script>
-
 	//reading data
+    var zip = {};
 	d3.csv("data.csv", function(err, data){
-
 		var income = 3;
 		var parks = 2;
 		var noise = 2;
-		
 
+        data.map(function(d) {
+          if(zip[d.Zip] == undefined) {
+            zip[d.Zip] = [];
+          }
+          zip[d.Zip].income = d.Income;
+          zip[d.Zip].parks = d.Park;
+          zip[d.Zip].noise = d.NoiseComplaints;
+        });
 		console.log(data);
 
 		console.log(filter(income, parks, noise, data));
-		
+
 	});
 
 	function getNewIncome(data, num1, num2) {
@@ -88,7 +95,7 @@
 			if (data[i].Park> num1 && data[i].Park <= num2) {
 				newdata.push(data[i]);
 			}
-			
+
 		}
 
 		// if(newdata.length == 0){
@@ -109,9 +116,9 @@
 			} else {
 				console.log("no");
 			}
-			
+
 		}
-		
+
 		console.log(newdata.length);
 		// if(newdata.length == 0){
 		// 	newdata = data;
@@ -138,14 +145,14 @@
 			return zipcodes(noiseArr);
 
 		} else if (noise == 2) {
-			
+
 			console.log('in noise')
-			
+
 			var noiseArr = getNewNoise(parkArr, 14000, 2800);
-			
+
 			console.log(parkArr);
 			console.log(noiseArr);
-			
+
 			return zipcodes(noiseArr);
 		} else {
 
@@ -170,13 +177,13 @@
 			}
 
 		} else if (parks = 2) {
-			
+
 			console.log("in parks");
-			
+
 			var parkArr = getNoiseParks(incomeArr, 19, 38);
 
 			console.log(parkArr);
-			
+
 
 			if(parkArr.length> 3){
 
@@ -230,7 +237,7 @@
 			if (incomeArr.length>3) {
 
 				return parkLevel(parks, noise, incomeArr);
-				
+
 			} else{
 				return zipcodes(incomeArr);
 			}
@@ -244,7 +251,7 @@
 			if (incomeArr.length>3) {
 
 				return parkLevel(parks, noise, incomeArr);
-				
+
 			} else{
 				return zipcodes(incomeArr);
 			}
@@ -256,7 +263,7 @@
 			if (incomeArr.length>3) {
 
 				return parkLevel(parks, noise, incomeArr);
-				
+
 			} else{
 				return zipcodes(incomeArr);
 			}
@@ -268,7 +275,7 @@
 			if (incomeArr.length>3) {
 
 				return parkLevel(parks, noise, incomeArr);
-				
+
 			} else{
 				return zipcodes(incomeArr);
 			}
@@ -296,15 +303,9 @@
 	}
 
 
-	RadarChart.defaultConfig.color = function() {};
-	RadarChart.defaultConfig.radius = 3;
-	RadarChart.defaultConfig.w = 400;
-	RadarChart.defaultConfig.h = 400;
-	</script>
+	RadarChart.defaultConfig.color = d3.scale.category10();
+	RadarChart.defaultConfig.radius = 1;
 
-	<span></span>
-
-	<script>
 	var data = [
 	  {
 	    className: 'characteristics', // optional can be used for styling
@@ -317,50 +318,19 @@
 	  },
 
 	];
-	function randomDataset() {
-	  return data.map(function(d) {
-	    return {
-	      className: d.className,
-	      axes: d.axes.map(function(axis) {
-	        return {axis: axis.axis, value: (0.4 * 10)};
-	      })
-	    };
-	  });
-	}
 
-	var chart = RadarChart.chart();
-	var cfg = chart.config(); // retrieve default config
-	var svg = d3.select('body').append('svg')
-	  .attr('width', cfg.w + cfg.w + 50)
-	  .attr('height', cfg.h + cfg.h / 4);
-	svg.append('g').classed('single', 1).datum(randomDataset()).call(chart);
+	// var chart = RadarChart.chart();
+	// var cfg = chart.config(); // retrieve default config
+	// var svg = d3.select('body').append('svg')
+	//   .attr('width', cfg.w )
+	//   .attr('height', cfg.h);
+	// svg.append('g').classed('single', 1).datum(data).call(chart);
 
-
-	</script>
-
-
-<!-- <script>
-	mapboxgl.accessToken = "pk.eyJ1IjoianQ2ODlzcDE4IiwiYSI6ImNqZXJtdTV2aTE2NW8yd2x0YTRyZnBnMHMifQ.yhMtx5-uADU9vqGlVgQT4g"
-	var map = new mapboxgl.Map({
-		container:"map",
-		style: "mapbox://styles/jt689sp18/cjgnw8klb00062rp9hh2fgi94",
-		center: [-73.9851,40.7589],
-		zoom:9
-	})
-
-	map.scrollZoom.disable()
-	map.addControl(new mapboxgl.NavigationControl());
-	map.getCanvas().style.cursor = 'default';
-	map.dragRotate.disable();
-	map.touchZoomRotate.disableRotation();
-
-</script> -->
-<script type="text/javascript">
- var map = L.mapbox.map('map').setView([40.75, -73.94], 15);
+$(document).ready(function(){
+ var map = L.mapbox.map('map').setView([40.75, -73.94], 11);
 
 // Set base style of vector data
  function style(feature) {
-     console.log("into the new world");
      return {
      weight: 0,
      fillOpacity: 0.5,
@@ -370,7 +340,6 @@
 
 // Set hover colors
  function highlightFeature(e) {
-     console.log(e);
  var layer = e.target;
      layer.setStyle({
          weight: 10,
@@ -382,6 +351,49 @@
      });
  }
 
+function compare(e) {
+ var postalCode = e.target.feature.properties.postalCode;
+console.log(postalCode);
+console.log(zip[postalCode]);
+ var data = [
+   {
+     className: 'characteristics', // optional can be used for styling
+     axes: [
+       {axis: "Parks", value: zip[postalCode].parks},
+       {axis: "Transportation", value: 10},
+       {axis: "Noise", value: zip[postalCode].noise},
+       {axis: "Income", value: zip[postalCode].income}
+     ]
+   },
+
+ ];
+
+ var chart = RadarChart.chart();
+ var cfg = {
+    w: 600, //Width of the circle
+    h: 600, //Height of the circle
+    margin: {top: 20, right: 20, bottom: 20, left: 20}, //The margins of the SVG
+    labelFactor: 0.85,  //How much farther than the radius of the outer circle should the labels be placed
+    wrapWidth: 60,      //The number of pixels after which a label needs to be given a new line
+    opacityArea: 0.35,  //The opacity of the area of the blob
+    dotRadius: 4,       //The size of the colored circles of each blog
+    opacityCircles: 0.1,//The opacity of the circles of each blob
+    strokeWidth: 0.7,   //The width of the stroke around each blob
+    roundStrokes: false,//If true the area and stroke will follow a round path (cardinal-closed)
+    color: d3.scale.category10(),  //Color function
+    hover: true,
+    axisLabels: true,
+    tickLabels: true,
+    fields: false,
+    scalesAndAxes: false,
+  };
+ // retrieve default config
+ var svg = d3.select('body').append('svg')
+   .attr('width', cfg.w )
+   .attr('height', cfg.h);
+ svg.append('g').classed('single', 1).datum(data).call(chart);
+}
+
 // A function to reset the colors when a neighborhood is not longer 'hovered'
  function resetHighlight(e) {
  geojson.resetStyle(e.target);
@@ -391,7 +403,8 @@
  function onEachFeature(feature, layer) {
  layer.on({
  mouseover: highlightFeature,
- mouseout: resetHighlight
+ mouseout: resetHighlight,
+ click: compare
  });
  }
 
@@ -409,7 +422,7 @@
  var topLayer = L.mapbox.tileLayer('bobbysud.map-3inxc2p4').addTo(map);
  topPane.appendChild(topLayer.getContainer());
  topLayer.setZIndex(100);
-
+});
 
 //pinning action
  // function clickActions(d) {
