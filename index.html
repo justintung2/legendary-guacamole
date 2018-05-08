@@ -42,8 +42,11 @@
 
 	<div class="charts"></div>
 
-	<div class="notes">
-		<p>Saved Zip Codes</p>
+	<div class="textportion">
+
+		<p>New York City's 304 square miles provide living space for more than 10 million inhabitants. However, not all living spaces are created equal. Some locations are considered more liveable than others. We compiled data on living conditions that matter to most people when deciding on where to live, including access to public transport, noise levels, and the average income in the area which often dictates how high the cost of living is.
+		</p>
+
 	</div>
 
 	<script>
@@ -306,10 +309,10 @@
 	  {
 	    className: 'characteristics', // optional can be used for styling
 	    axes: [
-	      {axis: "parks", value: 10},
-	      {axis: "transportation", value: 6},
-	      {axis: "noise", value: 5},
-	      {axis: "income", value: 9}
+	      {axis: "Parks", value: 10},
+	      {axis: "Transportation", value: 6},
+	      {axis: "Noise", value: 5},
+	      {axis: "Income", value: 9}
 	    ]
 	  },
 
@@ -406,6 +409,35 @@
  var topLayer = L.mapbox.tileLayer('bobbysud.map-3inxc2p4').addTo(map);
  topPane.appendChild(topLayer.getContainer());
  topLayer.setZIndex(100);
+
+
+//pinning action
+ // function clickActions(d) {
+ //      d3.select("#pinDiv")
+ //        .html(d3.select("#pinDiv").html() + makePinnedInfo(d));
+ //      d3.select("#pinnedCount")
+ //        .html("(" + (document.getElementById("pinDiv").children.length - 1) + ")");
+ //    }
+
+
+//making the pin
+ // function makePinnedInfo(d) {
+ //      return `
+ //      <div class = "pinnedInfo">
+ //        <button onclick="deleteDiv(this)"> x </button>
+ //        ${makeInfo(d)}
+ //      </div>
+ //      `
+ //    }
+ //  }
+
+
+//deleting pin
+ //  function deleteDiv(button) {
+ //    d3.select(button.parentNode).remove();
+ //    d3.select("#pinnedCount")
+ //      .html("(" + (document.getElementById("pinDiv").children.length - 1) + ")");
+ //  }
 
 </script>
 
