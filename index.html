@@ -80,6 +80,7 @@
 	<script>
 	//reading data
     var zip = {};
+    var zcodes = [];
 
 
     function set_values() {
@@ -99,11 +100,26 @@
 	          zip[d.Zip].income = d.Income;
 	          zip[d.Zip].parks = d.Park;
 	          zip[d.Zip].noise = d.NoiseComplaints;
+
 	        });
 
-			console.log(data);
+	
 
 			console.log(filter(income, parks, noise, data));
+
+			zcodes = filter(income, parks, noise, data);
+
+
+			// for (var i = 0; i < zcodes.length; i++) {
+
+			// 	geojson = L.geoJson(neighborhoods, {
+			// 		style : style,
+			// 		filter: ["==", "postalCode", zcodes[i]]
+			// 		}).addTo(map);
+				
+			// }
+
+
 
 		});
 
@@ -147,15 +163,13 @@
 
 		for (var i = 0; i < data.length; i++) {
 			if (data[i].NoiseComplaints > num1 && data[i].NoiseComplaints <= num2) {
-				console.log("b")
+				
 				newdata.push(data[i]);
-			} else {
-				console.log("no");
 			}
 
 		}
 
-		console.log(newdata.length);
+		
 		if(newdata.length == 0){
 			newdata = data;
 		}
@@ -184,9 +198,6 @@
 
 			var noiseArr = getNewNoise(parkArr, 14000, 2800);
 
-			console.log(parkArr);
-			console.log(noiseArr);
-
 			return zipcodes(noiseArr);
 		} else {
 
@@ -214,12 +225,10 @@
 
 			var parkArr = getNoiseParks(incomeArr, 19, 38);
 
-			console.log(parkArr);
+			
 
 
 			if(parkArr.length> 3){
-
-				console.log(parkArr);
 
 				return noiseLevel(noise, parkArr);
 
@@ -359,6 +368,17 @@
 $(document).ready(function(){
  var map = L.mapbox.map('map').setView([40.75, -73.94], 11);
 
+ for (var i = 0; i < zcodes.length; i++) {
+
+				geojson = L.geoJson(neighborhoods, {
+					style : style,
+					filter: ["==", "postalCode", String(zcodes[i])]
+					}).addTo(map);
+
+				console.log(geojson);
+				
+			}
+
 // Set base style of vector data
  function style(feature) {
      return {
@@ -383,8 +403,7 @@ $(document).ready(function(){
 
 function compare(e) {
  var postalCode = e.target.feature.properties.postalCode;
-console.log(postalCode);
-console.log(zip[postalCode]);
+
  var data = [
    {
      className: 'characteristics', // optional can be used for styling
