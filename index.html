@@ -86,7 +86,7 @@
 		<button onclick="set_values()" class="submitbutton">Update Filter</button>
 	</div>
 
-	<center><div id = "zipcodes"></div></center>
+	<center><div style="padding-top:130px" id = "zipcodes"></div></center>
 
 	<div id='map'></div>
 
@@ -379,12 +379,12 @@
 
 	];
 
-	// var chart = RadarChart.chart();
-	// var cfg = chart.config(); // retrieve default config
-	// var svg = d3.select('body').append('svg')
-	//   .attr('width', cfg.w )
-	//   .attr('height', cfg.h);
-	// svg.append('g').classed('single', 1).datum(data).call(chart);
+	var chart = RadarChart.chart();
+	var cfg = chart.config(); // retrieve default config
+	var svg = d3.select('body').append('svg')
+	  .attr('width', cfg.w )
+	  .attr('height', cfg.h);
+	svg.append('g').classed('single', 1).datum(data).call(chart);
 var map = L.mapbox.map('map').setView([40.75, -73.94], 11);
 
 setMap();
@@ -550,122 +550,122 @@ var svg = d3.select("#thisbarchart").append("svg")
 	.append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-// d3.tsv("nycbar.tsv", function(error, data){
-//
-// 	// filter year
-// 	var data = data.filter(function(d){return d;});
-// 	// Get every column value
-// 	var elements = Object.keys(data[0])
-// 		.filter(function(d) {
-// 			return ((d!="Borough"));
-// 		})
-//
-// 	var selection=elements[0]
-// 	console.log(elements)
-//
-//
-// 	var y = d3.scale.linear()
-// 			.domain([0, d3.max(data, function(d){
-// 				return +d[selection];
-// 			})])
-// 			.range([height, 0]);
-//
-// 	var x = d3.scale.ordinal()
-// 			.domain(data.map(function(d){ return d.Borough;}))
-// 			.rangeBands([0, width]);
-//
-//
-// 	var xAxis = d3.svg.axis()
-// 		.scale(x)
-// 	    .orient("bottom");
-//
-// 	var yAxis = d3.svg.axis()
-// 		.scale(y)
-// 	    .orient("left");
-//
-// 	svg.append("g")
-//     	.attr("class", "x axis")
-//     	.attr("transform", "translate(0," + height + ")")
-//     	.call(xAxis)
-//     	.selectAll("text")
-//     	.style("font-size", "15px")
-//       	.style("text-anchor", "end")
-//       	.attr("dx", "-.8em")
-//       	.attr("dy", "-.55em")
-//       	.attr("transform", "rotate(-45)" );
-//
-//
-//  	svg.append("g")
-//     	.attr("class", "y axis")
-//     	.call(yAxis);
-//
-// 	svg.selectAll("rectangle")
-// 		.data(data)
-// 		.enter()
-// 		.append("rect")
-// 		.attr("class","rectangle")
-// 		.attr("width", width/data.length)
-// 		.attr("height", function(d){
-// 			return height - y(+d[selection]);
-// 		})
-// 		.attr("x", function(d, i){
-// 			return (width / data.length) * i ;
-// 		})
-// 		.attr("y", function(d){
-// 			return y(+d[selection]);
-// 		})
-// 		.append("title")
-// 		.text(function(d){
-// 			return d.State + " : " + d[selection];
-// 		});
-//
-// 	var selector = d3.select("#drop")
-//     	.append("select")
-//     	.attr("id","dropdown")
-//     	.on("change", function(d){
-//         	selection = document.getElementById("dropdown");
-//
-//         	y.domain([0, d3.max(data, function(d){
-// 				return +d[selection.value];})]);
-//
-//         	yAxis.scale(y);
-//
-//         	d3.selectAll(".rectangle")
-//            		.transition()
-// 	            .attr("height", function(d){
-// 					return height - y(+d[selection.value]);
-// 				})
-// 				.attr("x", function(d, i){
-// 					return (width / data.length) * i ;
-// 				})
-// 				.attr("y", function(d){
-// 					return y(+d[selection.value]);
-// 				})
-//            		.ease("linear")
-//            		.select("title")
-//            		.text(function(d){
-//            			return d.Borough + " : " + d[selection.value];
-//            		});
-//
-//            	d3.selectAll("g.y.axis")
-//            		.transition()
-//            		.call(yAxis);
-//
-//          });
-//
-//     selector.selectAll("option")
-//       .data(elements)
-//       .enter().append("option")
-//       .attr("value", function(d){
-//       	console.log(d)
-//         return d;
-//       })
-//       .text(function(d){
-//         return d;
-//       })
-//
-//
-// });
+d3.tsv("nycbar.tsv", function(error, data){
+
+	// filter year
+	var data = data.filter(function(d){return d;});
+	// Get every column value
+	var elements = Object.keys(data[0])
+		.filter(function(d) {
+			return ((d!="Borough"));
+		})
+
+	var selection=elements[0]
+	console.log(elements)
+
+
+	var y = d3.scale.linear()
+			.domain([0, d3.max(data, function(d){
+				return +d[selection];
+			})])
+			.range([height, 0]);
+
+	var x = d3.scale.ordinal()
+			.domain(data.map(function(d){ return d.Borough;}))
+			.rangeBands([0, width]);
+
+
+	var xAxis = d3.svg.axis()
+		.scale(x)
+	    .orient("bottom");
+
+	var yAxis = d3.svg.axis()
+		.scale(y)
+	    .orient("left");
+
+	svg.append("g")
+    	.attr("class", "x axis")
+    	.attr("transform", "translate(0," + height + ")")
+    	.call(xAxis)
+    	.selectAll("text")
+    	.style("font-size", "15px")
+      	.style("text-anchor", "end")
+      	.attr("dx", "-.8em")
+      	.attr("dy", "-.55em")
+      	.attr("transform", "rotate(-45)" );
+
+
+ 	svg.append("g")
+    	.attr("class", "y axis")
+    	.call(yAxis);
+
+	svg.selectAll("rectangle")
+		.data(data)
+		.enter()
+		.append("rect")
+		.attr("class","rectangle")
+		.attr("width", width/data.length)
+		.attr("height", function(d){
+			return height - y(+d[selection]);
+		})
+		.attr("x", function(d, i){
+			return (width / data.length) * i ;
+		})
+		.attr("y", function(d){
+			return y(+d[selection]);
+		})
+		.append("title")
+		.text(function(d){
+			return d.State + " : " + d[selection];
+		});
+
+	var selector = d3.select("#drop")
+    	.append("select")
+    	.attr("id","dropdown")
+    	.on("change", function(d){
+        	selection = document.getElementById("dropdown");
+
+        	y.domain([0, d3.max(data, function(d){
+				return +d[selection.value];})]);
+
+        	yAxis.scale(y);
+
+        	d3.selectAll(".rectangle")
+           		.transition()
+	            .attr("height", function(d){
+					return height - y(+d[selection.value]);
+				})
+				.attr("x", function(d, i){
+					return (width / data.length) * i ;
+				})
+				.attr("y", function(d){
+					return y(+d[selection.value]);
+				})
+           		.ease("linear")
+           		.select("title")
+           		.text(function(d){
+           			return d.Borough + " : " + d[selection.value];
+           		});
+
+           	d3.selectAll("g.y.axis")
+           		.transition()
+           		.call(yAxis);
+
+         });
+
+    selector.selectAll("option")
+      .data(elements)
+      .enter().append("option")
+      .attr("value", function(d){
+      	console.log(d)
+        return d;
+      })
+      .text(function(d){
+        return d;
+      })
+
+
+});
 </script>
 
 </div>
