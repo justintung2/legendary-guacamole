@@ -33,32 +33,36 @@
 
 	<div id="navbar">
 		<a href="#">Noise</a>
-			<form class="noisebuttons">
-				<input type="radio" name="noise" value="low"> Low
-				<input type="radio" name="noise" value="medium">Medium
-				<input type="radio" name="noise" value="high">High
+			<form class="noisebuttons" name="noisebuttons">
+				<input type="radio" name="noise" value="1"> Low
+				<input type="radio" name="noise" value="2">Medium
+				<input type="radio" name="noise"  value="3">High
 			</form>
 		<a href="#">Parks</a>
-			<form class="parksbuttons">
-				<input type="radio" name="noise" value="low"> Low
-				<input type="radio" name="noise" value="medium">Medium
-				<input type="radio" name="noise" value="high">High
+			<form class="parksbuttons" name="parksbuttons">
+				<input type="radio" name="parks"  value="1"> Low
+				<input type="radio" name="parks"  value="2">Medium
+				<input type="radio" name="parks"  value="3">High
 			</form>
-		<a href="#">Transportation</a>
+		<!-- <a href="#">Transportation</a>
 			<form class="transportbuttons">
-				<input type="radio" name="noise" value="low"> Low
-				<input type="radio" name="noise" value="medium">Medium
-				<input type="radio" name="noise" value="high">High
-			</form>
+				<input type="radio" name="transport" value="1"> Low
+				<input type="radio" name="transport" value="2">Medium
+				<input type="radio" name="transport" value="3">High
+			</form> -->
 		<a href="#">Income</a>
-			<form class="incomebuttons">
-				<input type="radio" name="noise" value="low"> Low
-				<input type="radio" name="noise" value="medium">Medium
-				<input type="radio" name="noise" value="high">High
+			<form class="incomebuttons" name = "incomebuttons">
+				<input type="radio" name="income"  value="1"> <$78,000
+				<input type="radio" name="income"  value="2"> $78,000 - $168,000
+				<input type="radio" name="income"  value="3"> $168,000 - $258,000
+				<input type="radio" name="income"  value="4"> $258,000 - $348,000
+				<input type="radio" name="income"  value="5"> > $348,000
 			</form>
-		<form class="submitbutton">
+		<!-- <form class="submitbutton">
 			<input type="submit" value="Update Filter">
-		</form>
+		</form> -->
+
+		<button onclick="set_values()" class="submitbutton">Update Filter</button>
 	</div>
 
 
@@ -76,24 +80,34 @@
 	<script>
 	//reading data
     var zip = {};
-	d3.csv("data.csv", function(err, data){
-		var income = 3;
-		var parks = 2;
-		var noise = 2;
 
-        data.map(function(d) {
-          if(zip[d.Zip] == undefined) {
-            zip[d.Zip] = [];
-          }
-          zip[d.Zip].income = d.Income;
-          zip[d.Zip].parks = d.Park;
-          zip[d.Zip].noise = d.NoiseComplaints;
-        });
-		console.log(data);
 
-		console.log(filter(income, parks, noise, data));
+    function set_values() {
+			// body...
+			var parks = $("input[name=parks]:checked").val();
+			var noise = $("input[name=noise]:checked").val();
+			var income = $("input[name=income]:checked").val();	
 
-	});
+		d3.csv("data.csv", function(err, data){
+			// var income, parks, noise;
+
+
+	        data.map(function(d) {
+	          if(zip[d.Zip] == undefined) {
+	            zip[d.Zip] = [];
+	          }
+	          zip[d.Zip].income = d.Income;
+	          zip[d.Zip].parks = d.Park;
+	          zip[d.Zip].noise = d.NoiseComplaints;
+	        });
+
+			console.log(data);
+
+			console.log(filter(income, parks, noise, data));
+
+		});
+
+	}
 
 	function getNewIncome(data, num1, num2) {
 		// body...
@@ -104,9 +118,9 @@
 			}
 		}
 
-		// if(newdata.length == 0){
-		// 	newdata = data;
-		// }
+		if(newdata.length == 0){
+			newdata = data;
+		}
 
 		return newdata
 	}
@@ -121,9 +135,9 @@
 
 		}
 
-		// if(newdata.length == 0){
-		// 	newdata = data;
-		// }
+		if(newdata.length == 0){
+			newdata = data;
+		}
 
 		return newdata;
 	}
@@ -142,9 +156,9 @@
 		}
 
 		console.log(newdata.length);
-		// if(newdata.length == 0){
-		// 	newdata = data;
-		// }
+		if(newdata.length == 0){
+			newdata = data;
+		}
 
 		return newdata;
 	}
