@@ -65,6 +65,7 @@
 		<button onclick="set_values()" class="submitbutton">Update Filter</button>
 	</div>
 
+	<center><div id = "zipcodes"></div></center>
 
 	<div id='map'></div>
 
@@ -109,6 +110,7 @@
 
 			zcodes = filter(income, parks, noise, data);
 
+			document.getElementById('zipcodes').innerHTML = "The zip codes closest to your needs are " + zcodes;
 
 			// for (var i = 0; i < zcodes.length; i++) {
 
