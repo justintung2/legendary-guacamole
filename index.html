@@ -38,7 +38,7 @@
 }
 .axis {
   font: 15px sans-serif;
-  
+
 }
 
 .axis path,
@@ -111,7 +111,7 @@
 			// body...
 			var parks = $("input[name=parks]:checked").val();
 			var noise = $("input[name=noise]:checked").val();
-			var income = $("input[name=income]:checked").val();	
+			var income = $("input[name=income]:checked").val();
 
 		d3.csv("data.csv", function(err, data){
 			// var income, parks, noise;
@@ -127,21 +127,17 @@
 
 	        });
 
-	
-
-			console.log(filter(income, parks, noise, data));
 
 			zcodes = filter(income, parks, noise, data);
-
+            setMap();
 			document.getElementById('zipcodes').innerHTML = "The zip codes closest to your needs are " + zcodes;
-
 			// for (var i = 0; i < zcodes.length; i++) {
 
 			// 	geojson = L.geoJson(neighborhoods, {
 			// 		style : style,
 			// 		filter: ["==", "postalCode", zcodes[i]]
 			// 		}).addTo(map);
-				
+
 			// }
 
 
@@ -188,13 +184,13 @@
 
 		for (var i = 0; i < data.length; i++) {
 			if (data[i].NoiseComplaints > num1 && data[i].NoiseComplaints <= num2) {
-				
+
 				newdata.push(data[i]);
 			}
 
 		}
 
-		
+
 		if(newdata.length == 0){
 			newdata = data;
 		}
@@ -250,7 +246,7 @@
 
 			var parkArr = getNoiseParks(incomeArr, 19, 38);
 
-			
+
 
 
 			if(parkArr.length> 3){
@@ -389,27 +385,40 @@
 	//   .attr('width', cfg.w )
 	//   .attr('height', cfg.h);
 	// svg.append('g').classed('single', 1).datum(data).call(chart);
+var map = L.mapbox.map('map').setView([40.75, -73.94], 11);
 
-$(document).ready(function(){
- var map = L.mapbox.map('map').setView([40.75, -73.94], 11);
+setMap();
+ // Add vector data to map
 
- for (var i = 0; i < zcodes.length; i++) {
+function setMap(){
+  geojson = L.geoJson(neighborhoods, {
+      style: style2,
+      onEachFeature: onEachFeature,
+      filter: picnicFilter
+  }).addTo(map);
+}
 
-				geojson = L.geoJson(neighborhoods, {
-					style : style,
-					filter: ["==", "postalCode", String(zcodes[i])]
-					}).addTo(map);
-
-				console.log(geojson);
-				
-			}
-
+function picnicFilter(feature) {
+        if (zcodes.indexOf((""+feature.properties.postalCode+""))!=-1) {
+            return true;
+        }else{
+            return false;
+        }
+}
 // Set base style of vector data
- function style(feature) {
+ function style1(feature) {
      return {
      weight: 0,
      fillOpacity: 0.5,
-     fillColor: '#FFEDA0'
+     fillColor: 'red'
+     };
+ }
+
+ function style2(feature) {
+     return {
+     weight: 0,
+     fillOpacity: 0.5,
+     fillColor: 'blue'
      };
  }
 
@@ -483,10 +492,7 @@ function compare(e) {
  }
 
 // Add vector data to map
- geojson = L.geoJson(neighborhoods, {
-     style: style,
-     onEachFeature: onEachFeature
- }).addTo(map);
+
 
  // console.log(geojson);
 // Here is where the magic happens: Manipulate the z-index of tile layers,
@@ -496,8 +502,11 @@ function compare(e) {
  var topLayer = L.mapbox.tileLayer('bobbysud.map-3inxc2p4').addTo(map);
  topPane.appendChild(topLayer.getContainer());
  topLayer.setZIndex(100);
-});
-
+// });
+geojson = L.geoJson(neighborhoods, {
+    style: style1,
+    onEachFeature: onEachFeature,
+}).addTo(map);
 //pinning action
  // function clickActions(d) {
  //      d3.select("#pinDiv")
@@ -541,122 +550,122 @@ var svg = d3.select("#thisbarchart").append("svg")
 	.append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-d3.tsv("nycbar.tsv", function(error, data){
-
-	// filter year
-	var data = data.filter(function(d){return d;});
-	// Get every column value
-	var elements = Object.keys(data[0])
-		.filter(function(d) {
-			return ((d!="Borough"));
-		})
-
-	var selection=elements[0]
-	console.log(elements)
-	
-
-	var y = d3.scale.linear()
-			.domain([0, d3.max(data, function(d){
-				return +d[selection];
-			})])
-			.range([height, 0]);
-
-	var x = d3.scale.ordinal()
-			.domain(data.map(function(d){ return d.Borough;}))
-			.rangeBands([0, width]);
-
-
-	var xAxis = d3.svg.axis()
-		.scale(x)
-	    .orient("bottom");
-
-	var yAxis = d3.svg.axis()
-		.scale(y)
-	    .orient("left");
-
-	svg.append("g")
-    	.attr("class", "x axis")
-    	.attr("transform", "translate(0," + height + ")")
-    	.call(xAxis)
-    	.selectAll("text")
-    	.style("font-size", "15px")
-      	.style("text-anchor", "end")
-      	.attr("dx", "-.8em")
-      	.attr("dy", "-.55em")
-      	.attr("transform", "rotate(-45)" );
-
-
- 	svg.append("g")
-    	.attr("class", "y axis")
-    	.call(yAxis);
-
-	svg.selectAll("rectangle")
-		.data(data)
-		.enter()
-		.append("rect")
-		.attr("class","rectangle")
-		.attr("width", width/data.length)
-		.attr("height", function(d){
-			return height - y(+d[selection]);
-		})
-		.attr("x", function(d, i){
-			return (width / data.length) * i ;
-		})
-		.attr("y", function(d){
-			return y(+d[selection]);
-		})
-		.append("title")
-		.text(function(d){
-			return d.State + " : " + d[selection];
-		});
-
-	var selector = d3.select("#drop")
-    	.append("select")
-    	.attr("id","dropdown")
-    	.on("change", function(d){
-        	selection = document.getElementById("dropdown");
-
-        	y.domain([0, d3.max(data, function(d){
-				return +d[selection.value];})]);
-
-        	yAxis.scale(y);
-
-        	d3.selectAll(".rectangle")
-           		.transition()
-	            .attr("height", function(d){
-					return height - y(+d[selection.value]);
-				})
-				.attr("x", function(d, i){
-					return (width / data.length) * i ;
-				})
-				.attr("y", function(d){
-					return y(+d[selection.value]);
-				})
-           		.ease("linear")
-           		.select("title")
-           		.text(function(d){
-           			return d.Borough + " : " + d[selection.value];
-           		});
-      
-           	d3.selectAll("g.y.axis")
-           		.transition()
-           		.call(yAxis);
-
-         });
-
-    selector.selectAll("option")
-      .data(elements)
-      .enter().append("option")
-      .attr("value", function(d){
-      	console.log(d)
-        return d;
-      })
-      .text(function(d){
-        return d;
-      })
-
-
-});
+// d3.tsv("nycbar.tsv", function(error, data){
+//
+// 	// filter year
+// 	var data = data.filter(function(d){return d;});
+// 	// Get every column value
+// 	var elements = Object.keys(data[0])
+// 		.filter(function(d) {
+// 			return ((d!="Borough"));
+// 		})
+//
+// 	var selection=elements[0]
+// 	console.log(elements)
+//
+//
+// 	var y = d3.scale.linear()
+// 			.domain([0, d3.max(data, function(d){
+// 				return +d[selection];
+// 			})])
+// 			.range([height, 0]);
+//
+// 	var x = d3.scale.ordinal()
+// 			.domain(data.map(function(d){ return d.Borough;}))
+// 			.rangeBands([0, width]);
+//
+//
+// 	var xAxis = d3.svg.axis()
+// 		.scale(x)
+// 	    .orient("bottom");
+//
+// 	var yAxis = d3.svg.axis()
+// 		.scale(y)
+// 	    .orient("left");
+//
+// 	svg.append("g")
+//     	.attr("class", "x axis")
+//     	.attr("transform", "translate(0," + height + ")")
+//     	.call(xAxis)
+//     	.selectAll("text")
+//     	.style("font-size", "15px")
+//       	.style("text-anchor", "end")
+//       	.attr("dx", "-.8em")
+//       	.attr("dy", "-.55em")
+//       	.attr("transform", "rotate(-45)" );
+//
+//
+//  	svg.append("g")
+//     	.attr("class", "y axis")
+//     	.call(yAxis);
+//
+// 	svg.selectAll("rectangle")
+// 		.data(data)
+// 		.enter()
+// 		.append("rect")
+// 		.attr("class","rectangle")
+// 		.attr("width", width/data.length)
+// 		.attr("height", function(d){
+// 			return height - y(+d[selection]);
+// 		})
+// 		.attr("x", function(d, i){
+// 			return (width / data.length) * i ;
+// 		})
+// 		.attr("y", function(d){
+// 			return y(+d[selection]);
+// 		})
+// 		.append("title")
+// 		.text(function(d){
+// 			return d.State + " : " + d[selection];
+// 		});
+//
+// 	var selector = d3.select("#drop")
+//     	.append("select")
+//     	.attr("id","dropdown")
+//     	.on("change", function(d){
+//         	selection = document.getElementById("dropdown");
+//
+//         	y.domain([0, d3.max(data, function(d){
+// 				return +d[selection.value];})]);
+//
+//         	yAxis.scale(y);
+//
+//         	d3.selectAll(".rectangle")
+//            		.transition()
+// 	            .attr("height", function(d){
+// 					return height - y(+d[selection.value]);
+// 				})
+// 				.attr("x", function(d, i){
+// 					return (width / data.length) * i ;
+// 				})
+// 				.attr("y", function(d){
+// 					return y(+d[selection.value]);
+// 				})
+//            		.ease("linear")
+//            		.select("title")
+//            		.text(function(d){
+//            			return d.Borough + " : " + d[selection.value];
+//            		});
+//
+//            	d3.selectAll("g.y.axis")
+//            		.transition()
+//            		.call(yAxis);
+//
+//          });
+//
+//     selector.selectAll("option")
+//       .data(elements)
+//       .enter().append("option")
+//       .attr("value", function(d){
+//       	console.log(d)
+//         return d;
+//       })
+//       .text(function(d){
+//         return d;
+//       })
+//
+//
+// });
 </script>
 
 </div>
