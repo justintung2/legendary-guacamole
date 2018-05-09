@@ -23,6 +23,17 @@ body {margin:0;padding:0;height:1200px;background-color:#A6A6A6;font-family: 'Jo
 	border-radius:15px;
 }
 
+#drop {
+	position:absolute;
+	top:1800px;
+	left:650px;
+}
+
+#thisbarchart {
+	position:absolute;
+	top:750px;
+	left:-100px;
+}
 
 svg{
 	position:absolute;
@@ -60,7 +71,7 @@ svg{
 .incomebuttons {
 	position:absolute;
 	top:60px;
-	left:870px;
+	left:500px;
 	font-size:15px;
 }
 
@@ -76,10 +87,10 @@ svg{
 
 .charts {
 	position:absolute;
-	left:8%;
+	left:220px;
 	top:1100px;
-	width:1200px;
-	height:440px;
+	width:1000px;
+	height:640px;
 	background:white;
 	border-radius: 15px 15px 15px 15px;
 }
