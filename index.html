@@ -18,8 +18,7 @@
 </head>
 <style>
  html,
- body,
- #map {
+ body {
      padding: 0;
      margin: 0;
      width: 100%;
@@ -49,9 +48,9 @@
 }
 
 
- </style>
+</style>
 <body>
-
+    <h1>NYCIP</h1>
 	<div id="navbar">
 		<a href="#">Noise</a>
 			<form class="noisebuttons" name="noisebuttons">
@@ -80,23 +79,25 @@
 
 	<center><div style="padding-top:130px" id = "zipcodes"></div></center>
 
-	<div id='map'></div>
-
-	<div class="charts"></div>
-
-	<div class="textportion">
-
-		<p>New York City's 304 square miles provide living space for more than 10 million inhabitants. However, not all living spaces are created equal. Some locations are considered more liveable than others. We compiled data on living conditions that matter to most people when deciding on where to live, including access to public transport, noise levels, and the average income in the area which often dictates how high the cost of living is.
-		</p>
-
-	</div>
-
-	<div id="drop" align:center></div>
-
+    <div id="container" style="height:100%;width:100%">
+	<div id='map' style="float:right;"></div>
+    </div>
 	<script>
 	//reading data
     var zip = {};
     var zcodes = [];
+
+    d3.csv("data.csv", function(err, data){
+        data.map(function(d) {
+          if(zip[d.Zip] == undefined) {
+            zip[d.Zip] = [];
+          }
+          zip[d.Zip].income = d.Income;
+          zip[d.Zip].parks = d.Park;
+          zip[d.Zip].noise = d.NoiseComplaints;
+
+        });
+    });
 
     function set_values() {
 
@@ -325,20 +326,17 @@
 	var navbar = document.getElementById("navbar");
 
 	// Get the offset position of the navbar
-	var sticky = navbar.offsetTop;
+	// var sticky = navbar.offsetTop;
+    //
+	// // Add the sticky class to the navbar when you reach its scroll position. Remove "sticky" when you leave the scroll position
+	// function myFunction() {
+	//   if (window.pageYOffset >= sticky) {
+	//     navbar.classList.add("sticky")
+	//   } else {
+	//     navbar.classList.remove("sticky");
+	//   }
+	// }
 
-	// Add the sticky class to the navbar when you reach its scroll position. Remove "sticky" when you leave the scroll position
-	function myFunction() {
-	  if (window.pageYOffset >= sticky) {
-	    navbar.classList.add("sticky")
-	  } else {
-	    navbar.classList.remove("sticky");
-	  }
-	}
-
-
-	RadarChart.defaultConfig.color = d3.scale.category10();
-	RadarChart.defaultConfig.radius = 1;
 
 	var data = [
 	  {
@@ -353,12 +351,6 @@
 
 	];
 
-	var chart = RadarChart.chart();
-	var cfg = chart.config(); // retrieve default config
-	var svg = d3.select('body').append('svg')
-	  .attr('width', cfg.w )
-	  .attr('height', cfg.h);
-	svg.append('g').classed('single', 1).datum(data).call(chart);
     var map = L.mapbox.map('map').setView([40.75, -73.94], 11);
 
 function setMap(){
@@ -423,8 +415,8 @@ function compare(e) {
      axes: [
        {axis: "Parks", value: zip[postalCode].parks},
        {axis: "Transportation", value: 10},
-       {axis: "Noise", value: zip[postalCode].noise},
-       {axis: "Income", value: zip[postalCode].income}
+       {axis: "Noise", value: zip[postalCode].noise/100},
+       {axis: "Income", value: zip[postalCode].income/5000}
      ]
    },
 
@@ -449,11 +441,17 @@ function compare(e) {
     fields: false,
     scalesAndAxes: false,
   };
- // retrieve default config
- var svg = d3.select('body').append('svg')
-   .attr('width', cfg.w )
-   .attr('height', cfg.h);
- svg.append('g').classed('single', 1).datum(data).call(chart);
+
+  var chart = RadarChart.chart();
+  var cfg = chart.config(); // retrieve default config
+  if(document.getElementById("chart")!=null){
+      document.getElementById("chart").remove();
+  }
+  var svgChart = d3.select('body').append('div').attr("id", "chart");
+  var svg = d3.select('#chart').append('svg')
+    .attr('width', cfg.w )
+    .attr('height', cfg.h);
+  svg.append('g').classed('single', 1).datum(data).call(chart);
 }
 
 // A function to reset the colors when a neighborhood is not longer 'hovered'
@@ -524,12 +522,17 @@ geojson1 = L.geoJson(neighborhoods, {
  //    d3.select("#pinnedCount")
  //      .html("(" + (document.getElementById("pinDiv").children.length - 1) + ")");
  //  }
+// setTimeout(function(){
+var genText = d3.select('#container').append('div').attr('id','textportion');
+var text = genText.append("p").text("New York City's 304 square miles provide living space for more than 10 million inhabitants. However, not all living spaces are created equal. Some locations are considered more liveable than others. We compiled data on living conditions that matter to most people when deciding on where to live, including access to public transport, noise levels, and the average income in the area which often dictates how high the cost of living is.");
+text.style("text-align:center");
+text.style("font-size:18px");
+text.style("width:20%");
+// }, 1000);
 
-</script>
-
-<div id="thisbarchart">
-	<script>
-
+var drop = d3.select('body').append('div').attr('id','barChartArea');
+var thisBar = d3.select('#barChartArea').append('div').attr('id','drop');
+var thisBar2 = d3.select('#barChartArea').append('div').attr('id','thisbarchart');
 var margin = {top: 80, right: 180, bottom: 80, left: 180},
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
@@ -658,6 +661,5 @@ d3.tsv("nycbar.tsv", function(error, data){
 });
 </script>
 
-</div>
 </body>
 </html>
