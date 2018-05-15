@@ -369,6 +369,10 @@ function setMap(){
   geojson = L.geoJson(neighborhoods, {
       style: style1,
       onEachFeature: onEachFeature,
+  }).addTo(map);
+  geojson = L.geoJson(neighborhoods, {
+      style: style2,
+      onEachFeature: onEachFeature,
       filter: picnicFilter
   }).addTo(map);
 }
