@@ -65,12 +65,7 @@
 				<input type="radio" name="parks"  value="2">Medium
 				<input type="radio" name="parks"  value="3">High
 			</form>
-		<!-- <a href="#">Transportation</a>
-			<form class="transportbuttons">
-				<input type="radio" name="transport" value="1"> Low
-				<input type="radio" name="transport" value="2">Medium
-				<input type="radio" name="transport" value="3">High
-			</form> -->
+
 		<a href="#">Income</a>
 			<form class="incomebuttons" name = "incomebuttons">
 				<input type="radio" name="income"  value="1"> <$78,000
@@ -79,9 +74,6 @@
 				<input type="radio" name="income"  value="4"> $258,000 - $348,000
 				<input type="radio" name="income"  value="5"> > $348,000
 			</form>
-		<!-- <form class="submitbutton">
-			<input type="submit" value="Update Filter">
-		</form> -->
 
 		<button onclick="set_values()" class="submitbutton">Update Filter</button>
 	</div>
@@ -106,17 +98,13 @@
     var zip = {};
     var zcodes = [];
 
-
     function set_values() {
-			// body...
+
 			var parks = $("input[name=parks]:checked").val();
 			var noise = $("input[name=noise]:checked").val();
 			var income = $("input[name=income]:checked").val();
 
 		d3.csv("data.csv", function(err, data){
-			// var income, parks, noise;
-
-
 	        data.map(function(d) {
 	          if(zip[d.Zip] == undefined) {
 	            zip[d.Zip] = [];
@@ -127,21 +115,9 @@
 
 	        });
 
-
 			zcodes = filter(income, parks, noise, data);
             setMap();
 			document.getElementById('zipcodes').innerHTML = "The zip codes closest to your needs are " + zcodes;
-			// for (var i = 0; i < zcodes.length; i++) {
-
-			// 	geojson = L.geoJson(neighborhoods, {
-			// 		style : style,
-			// 		filter: ["==", "postalCode", zcodes[i]]
-			// 		}).addTo(map);
-
-			// }
-
-
-
 		});
 
 	}
@@ -273,7 +249,6 @@
 
 	}
 
-
 	//filter input:data output: zipcode
 	function filter(income, parks, noise, data) {
 		// income: will be a number 1, 2, 3, 4, 5
@@ -343,7 +318,6 @@
 		}
 	}
 
-
 	// When the user scrolls the page, execute myFunction
 	window.onscroll = function() {myFunction()};
 
@@ -385,14 +359,15 @@
 	  .attr('width', cfg.w )
 	  .attr('height', cfg.h);
 	svg.append('g').classed('single', 1).datum(data).call(chart);
-var map = L.mapbox.map('map').setView([40.75, -73.94], 11);
-
-setMap();
- // Add vector data to map
+    var map = L.mapbox.map('map').setView([40.75, -73.94], 11);
 
 function setMap(){
+  map.eachLayer(function (layer) {
+      if( layer instanceof L.GeoJSON )
+    map.removeLayer(layer);
+  });
   geojson = L.geoJson(neighborhoods, {
-      style: style2,
+      style: style1,
       onEachFeature: onEachFeature,
       filter: picnicFilter
   }).addTo(map);
@@ -494,7 +469,6 @@ function compare(e) {
 // Add vector data to map
 
 
- // console.log(geojson);
 // Here is where the magic happens: Manipulate the z-index of tile layers,
  // this makes sure our vector data shows up above the background map and
  // under roads and labels.
