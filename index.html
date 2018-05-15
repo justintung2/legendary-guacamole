@@ -366,9 +366,13 @@ function setMap(){
       if( layer instanceof L.GeoJSON )
     map.removeLayer(layer);
   });
-  geojson = L.geoJson(neighborhoods, {
+  geojson1 = L.geoJson(neighborhoods, {
       style: style1,
-      onEachFeature: onEachFeature,
+      onEachFeature: onEachFeature1,
+  }).addTo(map);
+  geojson2 = L.geoJson(neighborhoods, {
+      style: style2,
+      onEachFeature: onEachFeature2,
       filter: picnicFilter
   }).addTo(map);
 }
@@ -453,15 +457,27 @@ function compare(e) {
 }
 
 // A function to reset the colors when a neighborhood is not longer 'hovered'
- function resetHighlight(e) {
- geojson.resetStyle(e.target);
+ function resetHighlight1(e) {
+     geojson1.resetStyle(e.target);
+
+ }
+
+ function resetHighlight2(e) {
+     geojson2.resetStyle(e.target);
  }
 
 // Tell MapBox.js what functions to call when mousing over and out of a neighborhood
- function onEachFeature(feature, layer) {
+ function onEachFeature1(feature, layer) {
  layer.on({
  mouseover: highlightFeature,
- mouseout: resetHighlight,
+ mouseout: resetHighlight1,
+ click: compare
+ });
+ }
+ function onEachFeature2(feature, layer) {
+ layer.on({
+ mouseover: highlightFeature,
+ mouseout: resetHighlight2,
  click: compare
  });
  }
@@ -477,9 +493,9 @@ function compare(e) {
  topPane.appendChild(topLayer.getContainer());
  topLayer.setZIndex(100);
 // });
-geojson = L.geoJson(neighborhoods, {
+geojson1 = L.geoJson(neighborhoods, {
     style: style1,
-    onEachFeature: onEachFeature,
+    onEachFeature: onEachFeature1,
 }).addTo(map);
 //pinning action
  // function clickActions(d) {
