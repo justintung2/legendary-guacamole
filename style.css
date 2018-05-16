@@ -1,10 +1,16 @@
 body {margin:0;padding:0;height:1200px;font-family: 'Josefin Sans', sans-serif; font-size:30px;}
-
+h1{
+    text-align: center;
+    padding:10px;
+    margin-top:0px;
+    background-color: black;
+    color:white;
+}
 
 #map {
 	position:absolute;
 	top:200px;
-	left:10px;
+	right:10px;
 	bottom:0;
 	width:70%;
 	height:70%;
@@ -23,15 +29,40 @@ body {margin:0;padding:0;height:1200px;font-family: 'Josefin Sans', sans-serif; 
 	border-radius:15px;
 }
 
-#drop {
-    padding-left:20%;
+
+#scroll{
+    font-size: 18px;
+    background: black;
+    color: white;
+    position: absolute;
+    top: 650px;
+    left: 50px;
+    padding: 15px;
 }
 
-/* #thisbarchart {
+
+#reset{
+    font-size: 18px;
+    background: black;
+    color: white;
+    position: absolute;
+    top: 580px;
+    left: 50px;
+    padding: 15px;
+}
+
+#drop {
+    padding-left:45%;
+    position: absolute;
+    top: 750px;
+    z-index: 999;
+}
+
+#thisbarchart {
 	position:absolute;
 	top:750px;
-	left:-100px;
-} */
+	left:20%;
+}
 
 /* svg{
 	position:absolute;
@@ -42,13 +73,14 @@ body {margin:0;padding:0;height:1200px;font-family: 'Josefin Sans', sans-serif; 
 
 .submitbutton {
 	position:absolute;
-	top:20px;
+	top:130px;
 	left:1200px;
 }
 
 .noisebuttons {
 	position:absolute;
-	top:60px;
+    padding-left: 10px;
+	top:160px;
 	font-size:15px;
 }
 
@@ -61,36 +93,48 @@ body {margin:0;padding:0;height:1200px;font-family: 'Josefin Sans', sans-serif; 
 
 .parksbuttons {
 	position:absolute;
-	top:60px;
+	top:160px;
 	left:250px;
 	font-size:15px;
 }
 
 .incomebuttons {
 	position:absolute;
-	top:60px;
+	top:160px;
 	left:500px;
 	font-size:15px;
 }
 
 
 #textportion p{
-    margin-top:-10%;
+    position: absolute;
+    top: 250px;
+    left: 50px;
 	text-align: center;
-    font-size: 18px;
+    font-size: 15px;
 	width:20%;
-    float:right;
-    padding-right:20px;
+    max-height: 285px;
+    overflow-y: scroll;
+    word-wrap: break-word;
+}
+
+
+ul{
+    position: absolute;
+    top: 1300px;
+    font-size: 15px;
 }
 
 #chart {
+    position: absolute;
+    left: 30%;
+    top: 1300px;
 	background:white;
 	border-radius: 15px 15px 15px 15px;
 }
 
 /* Style the navbar */
 #navbar {
-    padding-left: 10px;
 	height:120px;
 	overflow:hidden;
 	background-color: white;
@@ -98,20 +142,9 @@ body {margin:0;padding:0;height:1200px;font-family: 'Josefin Sans', sans-serif; 
 }
 
 /* Navbar links */
-
-#navbar form {
-	  float: left;
-	  display: block;
-	  color: #f2f2f2;
-	  text-align: center;
-	  padding-top:20px;
-	  padding-right: 180px;
-
-	  text-decoration: none;
-	  color:black;
-}
 #navbar a {
 	  float: left;
+      padding-left: 5px;
 	  display: block;
 	  color: #f2f2f2;
 	  text-align: center;
